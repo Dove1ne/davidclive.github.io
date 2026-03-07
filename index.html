@@ -174,10 +174,11 @@
         setInterval(drawMatrix, 35);
 
         // --- TERMINAL LOGIC ---
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
         const commands = {
             help: "Commands: whoami, skills, research, clear, contact, secret, wget",
-            whoami: "David Clive Mutale: Specialist in Data, Security, and Math.",
-            skills: "Python, C++, Pentesting, SQL, R, Graphic Design, IT Infra.",
+            whoami: "Data Analyst, IT Specialist, Researcher, Web Developer, Mathematician, Graphic Designer, Cultural Scientist.",
+            skills: "Python, C++, Pentesting, SQL, R, Graphic Design, IT Infra., Microsoft Office, Adobe Products and Coreldraw",
             research: "Digital Ethics and Cybersecurity intersection.",
             contact: "Inbound connection requested... Email: davidclivemutale@gmail.com | LinkedIn: /in/dcmutale | Contact: +260978113034",
             secret: "NICE TRY. You'll need to bypass the firewall for that. ;)",
