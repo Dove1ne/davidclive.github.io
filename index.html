@@ -174,36 +174,105 @@
         setInterval(drawMatrix, 35);
 
         // --- TERMINAL LOGIC ---
-        const input = document.getElementById('terminal-input');
-        const history = document.getElementById('terminal-history');
         const commands = {
-            help: "Commands: whoami, skills, research, clear, contact",
-            whoami: "IT Specialist, Web Designer, Ethical Hacker, Mathematician, Data Analysit and Researcher.",
-            skills: "Python, C++, Pentesting, SQL, R, Graphic Design, IT Infra.",
-            research: "The intersection of African Digital Ethics and Cybersecurity.",
-            contact: "Direct Uplink: davidclivemutale@gmail.com"
+        help: "Commands: whoami, skills, research, clear, contact, secret, wget",
+        whoami: "David Clive Mutale: Specialist in Data, Security, and Math.",
+        skills: "Python, C++, Pentesting, SQL, R, Graphic Design, IT Infra.",
+        research: "Digital Ethics and Cybersecurity intersection.",
+        contact: "Inbound connection requested... Email: davidclivemutale@gmail.com | LinkedIn: /in/dcmutale | Contact: +260978113034",
+        secret: "NICE TRY. You'll need to bypass the firewall for that. ;)",
+        wget: (args) => {
+            if (args === './cv_mutale.pdf' || args === 'cv_mutale.pdf') {
+                // Trigger actual browser download
+                const link = document.createElement('a');
+                link.href = './cv_mutale.pdf'; // File must exist in your GitHub repo root
+                link.download = 'David_Clive_Mutale_CV.pdf';
+                link.click();
+                return "Connecting to server... [OK]\nDownloading cv_mutale.pdf [1.2MB]... 100% [DONE]";
+            }
+            return "Usage: wget ./cv_mutale.pdf";
+        }
         };
 
+        // Updated Event Listener to handle arguments
         input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const cmd = input.value.toLowerCase().trim();
-                const line = document.createElement('div');
-                line.innerHTML = `<span style="color:#fff">$ ${cmd}</span>`;
-                history.appendChild(line);
+        if (e.key === 'Enter') {
+            const fullInput = input.value.trim().toLowerCase();
+            const [cmd, ...args] = fullInput.split(' ');
+            const argString = args.join(' ');
 
-                const res = document.createElement('div');
-                res.style.color = "#888";
-                res.style.marginBottom = "10px";
+            const line = document.createElement('div');
+            line.innerHTML = `<span style="color:#fff">$ ${fullInput}</span>`;
+            history.appendChild(line);
 
-                if (cmd === 'clear') { history.innerHTML = ''; }
-                else if (commands[cmd]) { res.textContent = commands[cmd]; }
-                else { res.textContent = `Command not found: ${cmd}`; }
+            const res = document.createElement('div');
+            res.style.color = "#888";
+            res.style.marginBottom = "10px";
 
-                history.appendChild(res);
-                input.value = '';
-                document.querySelector('.terminal-body').scrollTop = document.querySelector('.terminal-body').scrollHeight;
+            if (cmd === 'clear') { 
+                history.innerHTML = ''; 
+            } else if (commands[cmd]) {
+                // If the command is a function (like wget), execute it with args
+                res.textContent = typeof commands[cmd] === 'function' 
+                    ? commands[cmd](argString) 
+                    : commands[cmd];
+            } else {
+                res.textContent = `Command not found: ${cmd}`;
             }
+
+            history.appendChild(res);
+            input.value = '';
+            document.querySelector('.terminal-body').scrollTop = document.querySelector('.terminal-body').scrollHeight;
+        }
         });
+
+
+        const logs = [
+            "[INFO] Scanning network nodes... 127.0.0.1:80 [SECURE]",
+            "[WARN] Entropy threshold approaching 0.982...",
+            "[MATH] Calculating Riemann Hypothesis zeros... Processing.",
+            "[SEC] Unauthorized ping detected from 192.168.1.254. Blocked.",
+            "[DATA] Cultural dataset 'Lusaka_Trends' synchronized successfully.",
+            "[IDLE] Kernel version 5.15.0-generic is stable.",
+            "[INFO] David's PGP Signature verified. Identity: AUTHENTIC."
+        ];
+
+        let idleTimer;
+
+        function startSystemLogs() {
+            // Wait 10 seconds before starting idle logs
+            idleTimer = setTimeout(() => {
+                printRandomLog();
+                // Print a new log every 8-15 seconds while idle
+                setInterval(printRandomLog, Math.random() * 7000 + 8000);
+            }, 10000);
+        }
+
+        function printRandomLog() {
+            const logContainer = document.getElementById('terminal-history');
+            const logEntry = document.createElement('div');
+            
+            // Style as a subtle background process
+            logEntry.style.color = "#114411"; 
+            logEntry.style.fontSize = "0.75rem";
+            logEntry.style.fontStyle = "italic";
+            logEntry.textContent = logs[Math.floor(Math.random() * logs.length)];
+            
+            logContainer.appendChild(logEntry);
+            
+            // Auto-scroll terminal
+            const termBody = document.querySelector('.terminal-body');
+            termBody.scrollTop = termBody.scrollHeight;
+        }
+
+        // Reset idle timer on every keypress
+        document.addEventListener('keydown', () => {
+            clearTimeout(idleTimer);
+            startSystemLogs();
+        });
+
+        // Start the sequence on load
+        startSystemLogs();
 
         // --- RADAR CHART ---
         new Chart(document.getElementById('researchChart'), {
