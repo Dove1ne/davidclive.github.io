@@ -48,9 +48,9 @@ A dynamic visualization of my research capabilities, proving my analytical depth
 For high-stakes research or professional inquiries, use the **PGP Public Key** located in the footer of my site. I prioritize secure and encrypted communication.
 
 ## 📫 Initiate Uplink
-*   **Live Portfolio:** [davidclive.github.io](https://davidclive.github.io)
+*   **Live Portfolio:** [davidclive.github.io](https://dove1ne.github.io/davidclive.github.io/)
 *   **LinkedIn:** [/in/dcmutale](https://linkedin.com)
-*   **Email:** `david@clivemutale.com`
+*   **Email:** `davidclivemutale@gmail.com`
 
 ---
 *"In a world of specialists, the polymath wins by seeing the connections others ignore."*
