@@ -213,42 +213,42 @@
 
         // Updated Event Listener to handle arguments
         input.addEventListener('keydown', async (e) => {
-        if (e.key === 'Enter') {
-            const fullInput = input.value.trim().toLowerCase();
-            const [cmd, ...args] = fullInput.split(' ');
-            const argString = args.join(' ');
-
-            // Add user command to history
-            const line = document.createElement('div');
-            line.innerHTML = `<span style="color:#fff">$ ${fullInput}</span>`;
-            history.appendChild(line);
-
-            // Process command
-            if (cmd === 'clear') {
-                history.innerHTML = '';
-            } else if (commands[cmd]) {
-                const result = typeof commands[cmd] === 'function' 
-                    ? await commands[cmd](argString) // Added await here
-                    : commands[cmd];
-                
-                if (result) {
-                    const res = document.createElement('div');
-                    res.style.color = "#888";
-                    res.style.marginBottom = "10px";
-                    res.textContent = result;
-                    history.appendChild(res);
+            if (e.key === 'Enter') {
+                const fullInput = input.value.trim().toLowerCase();
+                const [cmd, ...args] = fullInput.split(' ');
+                const argString = args.join(' ');
+        
+                // Add user command to history
+                const line = document.createElement('div');
+                line.innerHTML = `<span style="color:#fff">$ ${fullInput}</span>`;
+                history.appendChild(line);
+        
+                // Process command
+                if (cmd === 'clear') {
+                    history.innerHTML = '';
+                } else if (commands[cmd]) {
+                    const result = typeof commands[cmd] === 'function' 
+                        ? await commands[cmd](argString) // Added await here
+                        : commands[cmd];
+                    
+                    if (result) {
+                        const res = document.createElement('div');
+                        res.style.color = "#888";
+                        res.style.marginBottom = "10px";
+                        res.textContent = result;
+                        history.appendChild(res);
+                    }
+                } else {
+                    const error = document.createElement('div');
+                    error.style.color = "var(--danger)";
+                    error.textContent = `Command not found: ${cmd}`;
+                    history.appendChild(error);
                 }
-            } else {
-                const error = document.createElement('div');
-                error.style.color = "var(--danger)";
-                error.textContent = `Command not found: ${cmd}`;
-                history.appendChild(error);
+        
+                input.value = '';
+                const terminalBody = document.querySelector('.terminal-body');
+                terminalBody.scrollTop = terminalBody.scrollHeight;
             }
-
-            input.value = '';
-            const terminalBody = document.querySelector('.terminal-body');
-            terminalBody.scrollTop = terminalBody.scrollHeight;
-        }
         });
 
         const logs = [
