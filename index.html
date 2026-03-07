@@ -175,57 +175,80 @@
 
         // --- TERMINAL LOGIC ---
         const commands = {
-        help: "Commands: whoami, skills, research, clear, contact, secret, wget",
-        whoami: "David Clive Mutale: Specialist in Data, Security, and Math.",
-        skills: "Python, C++, Pentesting, SQL, R, Graphic Design, IT Infra.",
-        research: "Digital Ethics and Cybersecurity intersection.",
-        contact: "Inbound connection requested... Email: davidclivemutale@gmail.com | LinkedIn: /in/dcmutale | Contact: +260978113034",
-        secret: "NICE TRY. You'll need to bypass the firewall for that. ;)",
-        wget: (args) => {
-            if (args === './cv_mutale.pdf' || args === 'cv_mutale.pdf') {
-                // Trigger actual browser download
-                const link = document.createElement('a');
-                link.href = './cv_mutale.pdf'; // File must exist in your GitHub repo root
-                link.download = 'David_Clive_Mutale_CV.pdf';
-                link.click();
-                return "Connecting to server... [OK]\nDownloading cv_mutale.pdf [1.2MB]... 100% [DONE]";
+            help: "Commands: whoami, skills, research, clear, contact, secret, wget",
+            whoami: "David Clive Mutale: Specialist in Data, Security, and Math.",
+            skills: "Python, C++, Pentesting, SQL, R, Graphic Design, IT Infra.",
+            research: "Digital Ethics and Cybersecurity intersection.",
+            contact: "Inbound connection requested... Email: davidclivemutale@gmail.com | LinkedIn: /in/dcmutale | Contact: +260978113034",
+            secret: "NICE TRY. You'll need to bypass the firewall for that. ;)",
+            wget: async (args) => {
+                if (args === './cv_mutale.pdf' || args === 'cv_mutale.pdf') {
+                    const progressDiv = document.createElement('div');
+                    progressDiv.style.color = "var(--accent)";
+                    history.appendChild(progressDiv);
+
+                    // Simulate the loading bar
+                    const barLength = 20;
+                    for (let i = 0; i <= barLength; i++) {
+                        const percent = Math.round((i / barLength) * 100);
+                        const bar = "=".repeat(i) + "-".repeat(barLength - i);
+                        progressDiv.textContent = `Downloading: [${bar}] ${percent}%`;
+                        await sleep(100); // Adjust speed here
+                    }
+
+                    // Trigger actual download
+                    const link = document.createElement('a');
+                    link.href = './cv_mutale.pdf';
+                    link.download = 'David_Clive_Mutale_CV.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    return "SUCCESS: cv_mutale.pdf saved to /downloads/";
+                }
+                return "Usage: wget ./cv_mutale.pdf";
             }
-            return "Usage: wget ./cv_mutale.pdf";
-        }
         };
 
         // Updated Event Listener to handle arguments
-        input.addEventListener('keydown', (e) => {
+        input.addEventListener('keydown', async (e) => {
         if (e.key === 'Enter') {
             const fullInput = input.value.trim().toLowerCase();
             const [cmd, ...args] = fullInput.split(' ');
             const argString = args.join(' ');
 
+            // Add user command to history
             const line = document.createElement('div');
             line.innerHTML = `<span style="color:#fff">$ ${fullInput}</span>`;
             history.appendChild(line);
 
-            const res = document.createElement('div');
-            res.style.color = "#888";
-            res.style.marginBottom = "10px";
-
-            if (cmd === 'clear') { 
-                history.innerHTML = ''; 
+            // Process command
+            if (cmd === 'clear') {
+                history.innerHTML = '';
             } else if (commands[cmd]) {
-                // If the command is a function (like wget), execute it with args
-                res.textContent = typeof commands[cmd] === 'function' 
-                    ? commands[cmd](argString) 
+                const result = typeof commands[cmd] === 'function' 
+                    ? await commands[cmd](argString) // Added await here
                     : commands[cmd];
+                
+                if (result) {
+                    const res = document.createElement('div');
+                    res.style.color = "#888";
+                    res.style.marginBottom = "10px";
+                    res.textContent = result;
+                    history.appendChild(res);
+                }
             } else {
-                res.textContent = `Command not found: ${cmd}`;
+                const error = document.createElement('div');
+                error.style.color = "var(--danger)";
+                error.textContent = `Command not found: ${cmd}`;
+                history.appendChild(error);
             }
 
-            history.appendChild(res);
             input.value = '';
-            document.querySelector('.terminal-body').scrollTop = document.querySelector('.terminal-body').scrollHeight;
+            const terminalBody = document.querySelector('.terminal-body');
+            terminalBody.scrollTop = terminalBody.scrollHeight;
         }
         });
-
 
         const logs = [
             "[INFO] Scanning network nodes... 127.0.0.1:80 [SECURE]",
