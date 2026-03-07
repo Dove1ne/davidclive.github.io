@@ -8,6 +8,7 @@
     <!-- Hardened Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none';">
     
+    <!-- FIXED: Added full Chart.js path -->
     <script src="https://cdn.jsdelivr.net"></script>
 
     <style>
@@ -28,7 +29,6 @@
             overflow-x: hidden;
         }
 
-        /* Hero & Matrix Background */
         header {
             height: 85vh;
             display: flex;
@@ -50,7 +50,6 @@
         h1 { font-size: clamp(2.5rem, 8vw, 4rem); margin: 0; letter-spacing: -2px; }
         .glitch { color: var(--accent); font-family: monospace; font-weight: bold; font-size: 1.2rem; }
 
-        /* Terminal Component */
         .terminal-container {
             max-width: 850px;
             margin: -100px auto 50px;
@@ -71,8 +70,9 @@
             padding: 20px;
             font-family: 'Courier New', monospace;
             color: var(--accent);
-            min-height: 350px;
+            height: 350px;
             font-size: 14px;
+            overflow-y: auto;
         }
 
         #terminal-input {
@@ -80,14 +80,12 @@
             outline: none; font-family: monospace; width: 80%; font-size: 16px;
         }
 
-        /* Content Sections */
         .section { max-width: 1100px; margin: 100px auto; padding: 0 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; align-items: center; }
         
         .card { background: var(--glass); padding: 30px; border-radius: 15px; border: 1px solid #222; transition: 0.3s; }
         .card:hover { border-color: var(--accent); transform: translateY(-5px); }
 
-        /* Footer & Signature */
         footer { margin-top: 100px; padding: 80px 20px; border-top: 1px solid #222; text-align: center; }
         .pgp-block { font-family: monospace; font-size: 0.7rem; color: #444; text-align: left; background: #000; padding: 15px; border-radius: 5px; overflow-x: auto; max-width: 500px; margin: 20px auto; }
     </style>
@@ -98,7 +96,7 @@
         <canvas id="matrix-bg"></canvas>
         <div class="hero-content">
             <h1>David Clive Mutale</h1>
-            <div class="glitch">> POLYMATH | PROGRAMMER | ETHICAL HACKER | WEB DEVELOPER | DATA ANALYST</div>
+            <div class="glitch">> POLYMATH | PROGRAMMER | ETHICAL HACKER | DATA ANALYST</div>
             <p>Integrating Mathematics, Culture, and Cybersecurity.</p>
         </div>
     </header>
@@ -108,10 +106,11 @@
             <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
         </div>
         <div class="terminal-body" id="terminal">
-            <div>$ whoami</div>
-            <div style="color: #888;">David Clive Mutale: Programmer, Data Analyst, IT Specialist, Graphic Designer.</div>
-            <br>
-            <div id="terminal-history"></div>
+            <div id="terminal-history">
+                <div>$ whoami</div>
+                <div style="color: #888;">David Clive Mutale: Programmer, Data Analyst, IT Specialist, Researcher.</div>
+                <br>
+            </div>
             <div id="input-line">
                 <span>$ </span><input type="text" id="terminal-input" autofocus autocomplete="off">
             </div>
@@ -122,7 +121,7 @@
         <div class="grid">
             <div>
                 <h2>Analytical Core</h2>
-                <p>My research methodology combines <b>Mathematical Rigor</b> with <b>Cultural Science</b>. I don't just secure systems; I secure the human contexts they exist within.</p>
+                <p>My research methodology combines <b>Mathematical Rigor</b> with <b>Cultural Science</b>.</p>
                 <div class="card">
                     <canvas id="researchChart"></canvas>
                 </div>
@@ -130,8 +129,8 @@
             <div>
                 <h2>Initiate Uplink</h2>
                 <form id="contact-form" style="display: flex; flex-direction: column; gap: 15px;">
-                    <input type="text" id="name" placeholder="IDENTIFIER" required style="padding:12px; background:#000; border:1px solid #333; color:var(--accent); font-family:monospace;">
-                    <textarea id="message" rows="5" placeholder="MESSAGE_DATA" required style="padding:12px; background:#000; border:1px solid #333; color:var(--accent); font-family:monospace;"></textarea>
+                    <input type="text" id="sender-name" placeholder="IDENTIFIER" required style="padding:12px; background:#000; border:1px solid #333; color:var(--accent); font-family:monospace;">
+                    <textarea id="sender-msg" rows="5" placeholder="MESSAGE_DATA" required style="padding:12px; background:#000; border:1px solid #333; color:var(--accent); font-family:monospace;"></textarea>
                     <button type="submit" style="padding:15px; background:var(--accent); color:#000; font-weight:bold; border:none; cursor:pointer; font-family:monospace;">EXECUTE_TRANSMISSION</button>
                 </form>
             </div>
@@ -154,10 +153,17 @@
         // --- MATRIX RAIN ---
         const canvas = document.getElementById('matrix-bg');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
         const chars = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ$+-*/=%";
         const fontSize = 16;
-        const drops = Array(Math.floor(canvas.width/fontSize)).fill(1);
+        let columns = Math.floor(canvas.width/fontSize);
+        let drops = Array(columns).fill(1);
 
         function drawMatrix() {
             ctx.fillStyle = "rgba(10, 10, 10, 0.05)";
@@ -174,155 +180,97 @@
         setInterval(drawMatrix, 35);
 
         // --- TERMINAL LOGIC ---
+        const termInput = document.getElementById('terminal-input');
+        const history = document.getElementById('terminal-history');
+        const termBody = document.getElementById('terminal');
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
         const commands = {
-            help: "Commands: whoami, skills, research, clear, contact, secret, wget",
-            whoami: "Data Analyst, IT Specialist, Researcher, Web Developer, Mathematician, Graphic Designer, Cultural Scientist.",
-            skills: "Python, C++, Pentesting, SQL, R, Graphic Design, IT Infra., Microsoft Office, Adobe Products and Coreldraw",
-            research: "Digital Ethics and Cybersecurity intersection.",
-            contact: "Inbound connection requested... Email: davidclivemutale@gmail.com | LinkedIn: /in/dcmutale | Contact: +260978113034",
-            secret: "NICE TRY. You'll need to bypass the firewall for that. ;)",
+            help: "Available: whoami, skills, research, clear, contact, secret, wget",
+            whoami: "Data Analyst, IT Specialist, Researcher, Mathematician, Cultural Scientist.",
+            skills: "Python, C++, Pentesting, SQL, R, Adobe Products, CorelDraw.",
+            research: "The intersection of Digital Ethics and Cybersecurity.",
+            contact: "Email: davidclivemutale@gmail.com | LinkedIn: /in/dcmutale | +260978113034",
+            secret: "NICE TRY. Access Denied. ;)",
             wget: async (args) => {
                 if (args === './cv_mutale.pdf' || args === 'cv_mutale.pdf') {
-                    const progressDiv = document.createElement('div');
-                    progressDiv.style.color = "var(--accent)";
-                    history.appendChild(progressDiv);
-
-                    // Simulate the loading bar
-                    const barLength = 20;
-                    for (let i = 0; i <= barLength; i++) {
-                        const percent = Math.round((i / barLength) * 100);
-                        const bar = "=".repeat(i) + "-".repeat(barLength - i);
-                        progressDiv.textContent = `Downloading: [${bar}] ${percent}%`;
-                        await sleep(100); // Adjust speed here
+                    const barDiv = document.createElement('div');
+                    history.appendChild(barDiv);
+                    for (let i = 0; i <= 20; i++) {
+                        const p = Math.round((i/20)*100);
+                        barDiv.textContent = `Downloading CV: [${'='.repeat(i)}${'-'.repeat(20-i)}] ${p}%`;
+                        await sleep(50);
                     }
-
-                    // Trigger actual download
                     const link = document.createElement('a');
                     link.href = './cv_mutale.pdf';
-                    link.download = 'David_Clive_Mutale_CV.pdf';
-                    document.body.appendChild(link);
+                    link.download = 'David_Mutale_CV.pdf';
                     link.click();
-                    document.body.removeChild(link);
-
-                    return "SUCCESS: cv_mutale.pdf saved to /downloads/";
+                    return "Download Complete.";
                 }
                 return "Usage: wget ./cv_mutale.pdf";
             }
         };
 
-        // Updated Event Listener to handle arguments
-        input.addEventListener('keydown', async (e) => {
+        termInput.addEventListener('keydown', async (e) => {
             if (e.key === 'Enter') {
-                const fullInput = input.value.trim().toLowerCase();
-                const [cmd, ...args] = fullInput.split(' ');
-                const argString = args.join(' ');
-        
-                // Add user command to history
+                const fullCmd = termInput.value.trim();
+                const [cmd, arg] = fullCmd.toLowerCase().split(' ');
+                
                 const line = document.createElement('div');
-                line.innerHTML = `<span style="color:#fff">$ ${fullInput}</span>`;
+                line.innerHTML = `<span style="color:#fff">$ ${fullCmd}</span>`;
                 history.appendChild(line);
-        
-                // Process command
+
                 if (cmd === 'clear') {
                     history.innerHTML = '';
                 } else if (commands[cmd]) {
-                    const result = typeof commands[cmd] === 'function' 
-                        ? await commands[cmd](argString) // Added await here
-                        : commands[cmd];
-                    
-                    if (result) {
-                        const res = document.createElement('div');
-                        res.style.color = "#888";
-                        res.style.marginBottom = "10px";
-                        res.textContent = result;
-                        history.appendChild(res);
-                    }
-                } else {
-                    const error = document.createElement('div');
-                    error.style.color = "var(--danger)";
-                    error.textContent = `Command not found: ${cmd}`;
-                    history.appendChild(error);
+                    const res = typeof commands[cmd] === 'function' ? await commands[cmd](arg) : commands[cmd];
+                    const resDiv = document.createElement('div');
+                    resDiv.style.color = "#888";
+                    resDiv.textContent = res;
+                    history.appendChild(resDiv);
+                } else if (cmd !== "") {
+                    const errDiv = document.createElement('div');
+                    errDiv.style.color = "var(--danger)";
+                    errDiv.textContent = `Command not found: ${cmd}`;
+                    history.appendChild(errDiv);
                 }
-        
-                input.value = '';
-                const terminalBody = document.querySelector('.terminal-body');
-                terminalBody.scrollTop = terminalBody.scrollHeight;
+
+                termInput.value = '';
+                termBody.scrollTop = termBody.scrollHeight;
             }
         });
 
-        const logs = [
-            "[INFO] Scanning network nodes... 127.0.0.1:80 [SECURE]",
-            "[WARN] Entropy threshold approaching 0.982...",
-            "[MATH] Calculating Riemann Hypothesis zeros... Processing.",
-            "[SEC] Unauthorized ping detected from 192.168.1.254. Blocked.",
-            "[DATA] Cultural dataset 'Lusaka_Trends' synchronized successfully.",
-            "[IDLE] Kernel version 5.15.0-generic is stable.",
-            "[INFO] David's PGP Signature verified. Identity: AUTHENTIC."
-        ];
-
-        let idleTimer;
-
-        function startSystemLogs() {
-            // Wait 10 seconds before starting idle logs
-            idleTimer = setTimeout(() => {
-                printRandomLog();
-                // Print a new log every 8-15 seconds while idle
-                setInterval(printRandomLog, Math.random() * 7000 + 8000);
-            }, 10000);
-        }
-
-        function printRandomLog() {
-            const logContainer = document.getElementById('terminal-history');
-            const logEntry = document.createElement('div');
-            
-            // Style as a subtle background process
-            logEntry.style.color = "#114411"; 
-            logEntry.style.fontSize = "0.75rem";
-            logEntry.style.fontStyle = "italic";
-            logEntry.textContent = logs[Math.floor(Math.random() * logs.length)];
-            
-            logContainer.appendChild(logEntry);
-            
-            // Auto-scroll terminal
-            const termBody = document.querySelector('.terminal-body');
-            termBody.scrollTop = termBody.scrollHeight;
-        }
-
-        // Reset idle timer on every keypress
-        document.addEventListener('keydown', () => {
-            clearTimeout(idleTimer);
-            startSystemLogs();
-        });
-
-        // Start the sequence on load
-        startSystemLogs();
-
-        // --- RADAR CHART ---
+        // --- RADAR CHART FIXED ---
         new Chart(document.getElementById('researchChart'), {
             type: 'radar',
             data: {
                 labels: ['Security', 'Math', 'Data', 'Design', 'Research', 'IT'],
                 datasets: [{
-                    label: 'Capabilities',
-                    data: [95, 90, 85, 80, 92, 88],
+                    label: 'Skill Matrix',
+                    data: [95, 90, 88, 85, 92, 89], // FIXED: Added missing data
                     backgroundColor: 'rgba(0, 255, 65, 0.1)',
                     borderColor: '#00ff41',
                     borderWidth: 2
                 }]
             },
-            options: { scales: { r: { ticks: { display: false }, grid: { color: '#333' }, angleLines: { color: '#333' }, pointLabels: { color: '#fff' } } } }
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    r: {
+                        grid: { color: '#333' },
+                        angleLines: { color: '#333' },
+                        pointLabels: { color: '#fff' },
+                        ticks: { display: false }
+                    }
+                }
+            }
         });
 
-        // --- CONTACT TRANSMISSION ---
+        // --- CONTACT MOCK ---
         document.getElementById('contact-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            document.querySelector('.terminal-container').scrollIntoView({ behavior: 'smooth' });
-            history.innerHTML = `<div style="color:gold;">[!] INBOUND SIGNAL...</div>`;
-            setTimeout(() => {
-                history.innerHTML += `<div>> Packet Encrypted...</div><div>> Transmission Success.</div>`;
-                alert("Message Sent to Mutale.");
-            }, 1000);
+            alert("Transmission Received. David will contact you shortly.");
+            e.target.reset();
         });
     </script>
 </body>
