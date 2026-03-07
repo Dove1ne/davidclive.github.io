@@ -326,15 +326,18 @@
         if(localStorage.getItem('theme')==='navy') toggle.click();
 
          // --- RADAR CHART FIXED ---
-        new Chart(document.getElementById('researchChart'), {
+        const chartCtx = document.getElementById('researchChart'); // Ensure this matches your HTML id
+        
+        if (chartCtx) {
+        new Chart(chartCtx, {
             type: 'radar',
             data: {
-                labels: ['Security', 'Math', 'Data', 'Design', 'Research', 'IT'],
+                labels: ['Security', 'Math', 'Data', 'Design', 'Research'],
                 datasets: [{
-                    label: 'Skill Matrix',
-                    data: [95, 90, 88, 85, 92, 89], // FIXED: Added missing data
-                    backgroundColor: 'rgba(0, 255, 65, 0.1)',
+                    label: 'Capability Level',
+                    data: [95, 90, 85, 75, 92], // FIXED: Ensure there are numbers here
                     borderColor: '#00ff41',
+                    backgroundColor: 'rgba(0, 255, 65, 0.1)',
                     borderWidth: 2
                 }]
             },
@@ -345,11 +348,13 @@
                         grid: { color: '#333' },
                         angleLines: { color: '#333' },
                         pointLabels: { color: '#fff' },
-                        ticks: { display: false }
+                        ticks: { display: false, beginAtZero: true, max: 100 }
                     }
                 }
             }
         });
+        }
+
 
         // --- CONTACT MOCK ---
         document.getElementById('contact-form').addEventListener('submit', (e) => {
