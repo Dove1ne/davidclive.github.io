@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Clive Mutale | Polymath & Specialist</title>
+    
+    <!-- Hardened Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-ancestors 'none';">
+    
+    <script src="https://cdn.jsdelivr.net"></script>
+
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --text: #e0e0e0;
+            --accent: #00ff41; /* Matrix Green */
+            --glass: rgba(255, 255, 255, 0.05);
+            --danger: #ff3333;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero & Matrix Background */
+        header {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center, #112211 0%, #0a0a0a 100%);
+        }
+
+        #matrix-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 0.15;
+        }
+
+        .hero-content { z-index: 2; padding: 20px; }
+        h1 { font-size: clamp(2.5rem, 8vw, 4rem); margin: 0; letter-spacing: -2px; }
+        .glitch { color: var(--accent); font-family: monospace; font-weight: bold; font-size: 1.2rem; }
+
+        /* Terminal Component */
+        .terminal-container {
+            max-width: 850px;
+            margin: -100px auto 50px;
+            background: #000;
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 1px solid #333;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+        }
+
+        .terminal-header { background: #222; padding: 10px; display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
+
+        .terminal-body {
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent);
+            min-height: 350px;
+            font-size: 14px;
+        }
+
+        #terminal-input {
+            background: transparent; border: none; color: var(--accent);
+            outline: none; font-family: monospace; width: 80%; font-size: 16px;
+        }
+
+        /* Content Sections */
+        .section { max-width: 1100px; margin: 100px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; align-items: center; }
+        
+        .card { background: var(--glass); padding: 30px; border-radius: 15px; border: 1px solid #222; transition: 0.3s; }
+        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+
+        /* Footer & Signature */
+        footer { margin-top: 100px; padding: 80px 20px; border-top: 1px solid #222; text-align: center; }
+        .pgp-block { font-family: monospace; font-size: 0.7rem; color: #444; text-align: left; background: #000; padding: 15px; border-radius: 5px; overflow-x: auto; max-width: 500px; margin: 20px auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <canvas id="matrix-bg"></canvas>
+        <div class="hero-content">
+            <h1>David Clive Mutale</h1>
+            <div class="glitch">> POLYMATH | RESEARCHER | ETHICAL HACKER</div>
+            <p>Integrating Mathematics, Culture, and Cybersecurity.</p>
+        </div>
+    </header>
+
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        </div>
+        <div class="terminal-body" id="terminal">
+            <div>$ whoami</div>
+            <div style="color: #888;">David Clive Mutale: Programmer, Data Analyst, IT Specialist.</div>
+            <br>
+            <div id="terminal-history"></div>
+            <div id="input-line">
+                <span>$ </span><input type="text" id="terminal-input" autofocus autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="grid">
+            <div>
+                <h2>Analytical Core</h2>
+                <p>My research methodology combines <b>Mathematical Rigor</b> with <b>Cultural Science</b>. I don't just secure systems; I secure the human contexts they exist within.</p>
+                <div class="card">
+                    <canvas id="researchChart"></canvas>
+                </div>
+            </div>
+            <div>
+                <h2>Initiate Uplink</h2>
+                <form id="contact-form" style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="text" id="name" placeholder="IDENTIFIER" required style="padding:12px; background:#000; border:1px solid #333; color:var(--accent); font-family:monospace;">
+                    <textarea id="message" rows="5" placeholder="MESSAGE_DATA" required style="padding:12px; background:#000; border:1px solid #333; color:var(--accent); font-family:monospace;"></textarea>
+                    <button type="submit" style="padding:15px; background:var(--accent); color:#000; font-weight:bold; border:none; cursor:pointer; font-family:monospace;">EXECUTE_TRANSMISSION</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div style="font-style: italic; color: #444; margin-bottom: 20px;">
+            &int; Culture(t) &delta;t + &sum; Data = &infin;
+        </div>
+        <div class="pgp-block">
+            -----BEGIN PGP PUBLIC KEY BLOCK-----<br>
+            mQENBF2... DAVID_CLIVE_MUTALE_AUTHENTICATED ...<br>
+            -----END PGP PUBLIC KEY BLOCK-----
+        </div>
+        <p>&copy; 2024 Mutale Systems. Loc: -15.3875, 28.3228</p>
+    </footer>
+
+    <script>
+        // --- MATRIX RAIN ---
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const chars = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ$+-*/=%";
+        const fontSize = 16;
+        const drops = Array(Math.floor(canvas.width/fontSize)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(10, 10, 10, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ff41";
+            ctx.font = fontSize + "px monospace";
+            drops.forEach((y, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(drawMatrix, 35);
+
+        // --- TERMINAL LOGIC ---
+        const input = document.getElementById('terminal-input');
+        const history = document.getElementById('terminal-history');
+        const commands = {
+            help: "Commands: whoami, skills, research, clear, contact",
+            whoami: "Specialist in Data, Security, and Mathematical Research.",
+            skills: "Python, C++, Pentesting, SQL, R, Graphic Design, IT Infra.",
+            research: "The intersection of African Digital Ethics and Cybersecurity.",
+            contact: "Direct Uplink: david@clivemutale.com"
+        };
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value.toLowerCase().trim();
+                const line = document.createElement('div');
+                line.innerHTML = `<span style="color:#fff">$ ${cmd}</span>`;
+                history.appendChild(line);
+
+                const res = document.createElement('div');
+                res.style.color = "#888";
+                res.style.marginBottom = "10px";
+
+                if (cmd === 'clear') { history.innerHTML = ''; }
+                else if (commands[cmd]) { res.textContent = commands[cmd]; }
+                else { res.textContent = `Command not found: ${cmd}`; }
+
+                history.appendChild(res);
+                input.value = '';
+                document.querySelector('.terminal-body').scrollTop = document.querySelector('.terminal-body').scrollHeight;
+            }
+        });
+
+        // --- RADAR CHART ---
+        new Chart(document.getElementById('researchChart'), {
+            type: 'radar',
+            data: {
+                labels: ['Security', 'Math', 'Data', 'Design', 'Research', 'IT'],
+                datasets: [{
+                    label: 'Capabilities',
+                    data: [95, 90, 85, 80, 92, 88],
+                    backgroundColor: 'rgba(0, 255, 65, 0.1)',
+                    borderColor: '#00ff41',
+                    borderWidth: 2
+                }]
+            },
+            options: { scales: { r: { ticks: { display: false }, grid: { color: '#333' }, angleLines: { color: '#333' }, pointLabels: { color: '#fff' } } } }
+        });
+
+        // --- CONTACT TRANSMISSION ---
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.querySelector('.terminal-container').scrollIntoView({ behavior: 'smooth' });
+            history.innerHTML = `<div style="color:gold;">[!] INBOUND SIGNAL...</div>`;
+            setTimeout(() => {
+                history.innerHTML += `<div>> Packet Encrypted...</div><div>> Transmission Success.</div>`;
+                alert("Message Sent to Mutale.");
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
