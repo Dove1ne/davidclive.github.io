@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | ACCESS DENIED</title>
+    <style>
+        body {
+            background-color: #050000;
+            color: #ff3333; /* Alert Red */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .alert-box {
+            border: 2px solid #ff3333;
+            padding: 40px;
+            background: rgba(255, 0, 0, 0.05);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.2);
+            position: relative;
+        }
+
+        h1 { font-size: 3rem; margin: 0; text-transform: uppercase; }
+        p { font-size: 1.2rem; color: #888; }
+
+        .glitch-text { animation: glitch 1s infinite; }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); color: #fff; }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); color: #ff3333; }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .btn-return {
+            margin-top: 30px;
+            padding: 10px 25px;
+            background: #ff3333;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .btn-return:hover { background: #fff; }
+    </style>
+</head>
+<body>
+    <div class="alert-box">
+        <h1 class="glitch-text">404: SECURITY_BREACH</h1>
+        <p>[!] UNAUTHORIZED ENDPOINT DETECTED</p>
+        <p>Your IP has been logged. Trace sequence initiated...</p>
+        <code style="color: #444;">ERROR_LOG: PAGE_NOT_FOUND_IN_MUTALE_DATABASE</code>
+        <br>
+        <a href="/" class="btn-return">RETURN TO SECURE TERMINAL</a>
+    </div>
+</body>
+</html>
