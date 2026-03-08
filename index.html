@@ -308,11 +308,16 @@
             whoami: async () => {
                 history.innerHTML += "<div>[SYSTEM] Scanning Biometric Signature...</div>";
                 for (let line of myAsciiArt) {
-                    const row = document.createElement('div'); row.className = "ascii-row";
-                    row.textContent = line; history.appendChild(row);
-                    termBody.scrollTop = termBody.scrollHeight; await sleep(30);
+                    const row = document.createElement('div');
+                    row.className = "ascii-row";
+                    row.textContent = line;
+                    history.appendChild(row);
+                    row.style.color = "var(--accent)";
+                    termBody.scrollTop = termBody.scrollHeight;
+                    await sleep(30);
+                    row.style.opacity = "0.6";
                 }
-                return "[AUTHENTICATED] David Clive Mutale: Polymath Node Active.";
+                return "[VERIFIED] David Clive Mutale: Polymath Node Active.";
             },
             skills: () => "Python, C++, SQL, R, Pentesting, Adobe Suite, IT Infrastructure.",
             research: (args) => {
