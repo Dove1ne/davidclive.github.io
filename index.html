@@ -326,34 +326,51 @@
         if(localStorage.getItem('theme')==='navy') toggle.click();
 
          // --- RADAR CHART FIXED ---
-        const chartCtx = document.getElementById('researchChart'); // Ensure this matches your HTML id
+        const ctx = document.getElementById('researchChart');
         
-        if (chartCtx) {
-        new Chart(chartCtx, {
-            type: 'radar',
-            data: {
-                labels: ['Security', 'Math', 'Data', 'Design', 'Research'],
-                datasets: [{
-                    label: 'Capability Level',
-                    data: [95, 90, 85, 75, 92], // FIXED: Ensure there are numbers here
-                    borderColor: '#00ff41',
-                    backgroundColor: 'rgba(0, 255, 65, 0.1)',
-                    borderWidth: 2
-                }]
+        const researchChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Ethical Hacking', 'Mathematics', 'Data Analysis', 'Graphic Design', 'Research'],
+            datasets: [{
+                label: 'Proficiency Level',
+                data: [95, 90, 85, 75, 92],// Your skill levels (0-100)
+                backgroundColor: 'rgba(0, 255, 65, 0.2)', // Matrix Green
+                borderColor: '#00ff41',
+                borderWidth: 2,
+                pointBackgroundColor: '#00ff41',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#00ff41'
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false }
             },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: {
-                    r: {
-                        grid: { color: '#333' },
-                        angleLines: { color: '#333' },
-                        pointLabels: { color: '#fff' },
-                        ticks: { display: false, beginAtZero: true, max: 100 }
-                    }
+            scales: {
+                r: {
+                    angleLines: { color: '#333' },
+                    grid: { color: '#333' },
+                    pointLabels: {
+                        color: '#fff',
+                        font: { size: 12, family: 'monospace' }
+                    },
+                    ticks: { display: false, stepSize: 20 },
+                    suggestedMin: 0,
+                    suggestedMax: 100
                 }
             }
-        });
         }
+        });
+        
+        // Update chart colors when theme toggles
+        document.getElementById('mode-toggle').addEventListener('click', () => {
+        const isNavy = document.body.classList.contains('navy-mode');
+        researchChart.data.datasets[0].borderColor = isNavy ? '#ffffff' : '#00ff41';
+        researchChart.data.datasets[0].backgroundColor = isNavy ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 255, 65, 0.2)';
+        researchChart.update();
+        });
 
 
         // --- CONTACT MOCK ---
