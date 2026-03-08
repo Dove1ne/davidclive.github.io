@@ -93,6 +93,41 @@
 
         footer { margin-top: 100px; padding: 80px 20px; border-top: 1px solid #222; text-align: center; }
         .pgp-block { font-family: monospace; font-size: 0.7rem; color: #444; text-align: left; background: #000; padding: 15px; border-radius: 5px; overflow-x: auto; max-width: 500px; margin: 20px auto; }
+
+        /* Mobile Menu Toggle */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed; top: 20px; right: 20px;
+            z-index: 10001; cursor: pointer;
+            flex-direction: column; gap: 5px;
+        }
+        
+        .bar { width: 25px; height: 3px; background: var(--accent); transition: 0.3s; }
+        
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); display: none;
+            align-items: center; justify-content: center;
+            z-index: 10000; opacity: 0; transition: opacity 0.3s ease;
+        }
+        
+        .mobile-nav-links { display: flex; flex-direction: column; gap: 30px; text-align: center; }
+        .mobile-nav-links a { 
+            font-size: 2rem; color: var(--accent); text-decoration: none; 
+            font-family: monospace; font-weight: bold;
+        }
+        
+        /* Responsive Media Query */
+        @media (max-width: 768px) {
+            .mobile-nav-toggle { display: flex; }
+            header h1 { font-size: 2.5rem; }
+        }
+        
+        /* Toggle Animation */
+        .mobile-nav-toggle.open .bar:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+        .mobile-nav-toggle.open .bar:nth-child(2) { opacity: 0; }
+        .mobile-nav-toggle.open .bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
     </style>
 </head>
 <body>
@@ -109,6 +144,23 @@
             <h1>David Clive Mutale</h1>
             <div class="glitch">> POLYMATH | PROGRAMMER | ETHICAL HACKER | DATA ANALYST</div>
             <p>Integrating Mathematics, Culture, and Cybersecurity.</p>
+        </div>
+        
+        <!-- Mobile Nav Toggle -->
+        <div class="mobile-nav-toggle" id="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobile-menu">
+            <nav class="mobile-nav-links">
+                <a href="#terminal" onclick="toggleMenu()">TERMINAL</a>
+                <a href="#radarChart" onclick="toggleMenu()">SKILLS</a>
+                <a href="#graphic-carousel" onclick="toggleMenu()">GALLERY</a>
+                <a href="#contact" onclick="toggleMenu()">CONTACT</a>
+            </nav>
         </div>
     </header>
 
@@ -253,6 +305,17 @@
                 return "[AUTHENTICATED] David Clive Mutale: Polymath Node Active.";
             },
             skills: () => "Python, C++, SQL, R, Pentesting, Adobe Suite, IT Infrastructure.",
+            research: (args) => {
+                const deepDives = {
+                    security: "Deep Dive: Advanced Pentesting in Linux Environments. Experience with OWASP Top 10 and network hardening.",
+                    mathematics: "Deep Dive: Statistical Modeling and Cryptographic Algorithms. Focus on RSA and Elliptic Curve theory.",
+                    data_analysis: "Deep Dive: Big Data Processing with Python & R. Expert in cleaning messy datasets and predictive modeling.",
+                    design: "Deep Dive: UI/UX Principles. Specializing in high-contrast dark-mode interfaces for technical dashboards.",
+                    research: "Deep Dive: Cultural Science. Studying the impact of digital surveillance on tribal community structures."
+                };
+                return deepDives[args] || `No specialized data found for '${args}'. Try 'help'.`;
+            }
+                
             status: () => "Probes: 4,092 | Stability: Nominal | Memory: Clear",
             wget: async (arg) => {
                 if (arg === "./cv_mutale.pdf") {
@@ -325,44 +388,46 @@
         };
         if(localStorage.getItem('theme')==='navy') toggle.click();
 
-         // --- RADAR CHART FIXED ---
+         // --- RADAR CHART ---
         const ctx = document.getElementById('researchChart');
         
         const researchChart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ['Ethical Hacking', 'Mathematics', 'Data Analysis', 'Graphic Design', 'Research'],
-            datasets: [{
-                label: 'Proficiency Level',
-                data: [95, 90, 85, 75, 92],// Your skill levels (0-100)
-                backgroundColor: 'rgba(0, 255, 65, 0.2)', // Matrix Green
-                borderColor: '#00ff41',
-                borderWidth: 2,
-                pointBackgroundColor: '#00ff41',
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: '#00ff41'
-            }]
-        },
-        options: {
-            plugins: {
-                legend: { display: false }
+            type: 'radar',
+            data: {
+                labels: ['Security', 'Mathematics', 'Data Analysis', 'Design', 'Research'],
+                datasets: [{
+                    label: 'Proficiency',
+                    data: [90, 85, 95, 80, 88],
+                    backgroundColor: 'rgba(0, 255, 65, 0.2)',
+                    borderColor: '#00ff41',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#00ff41',
+                }]
             },
-            scales: {
-                r: {
-                    angleLines: { color: '#333' },
-                    grid: { color: '#333' },
-                    pointLabels: {
-                        color: '#fff',
-                        font: { size: 12, family: 'monospace' }
-                    },
-                    ticks: { display: false, stepSize: 20 },
-                    suggestedMin: 0,
-                    suggestedMax: 100
+            options: {
+                plugins: { legend: { display: false } },
+                // Detect clicks on the chart elements
+                onClick: (event, activeElements, chart) => {
+                    if (activeElements.length > 0) {
+                        // Get the index of the clicked point
+                        const dataIndex = activeElements[0].index;
+                        const clickedSkill = chart.data.labels[dataIndex];
+                        
+                        // Trigger the terminal deep-dive
+                        triggerTerminalDeepDive(clickedSkill);
+                    }
+                },
+                scales: {
+                    r: {
+                        grid: { color: '#333' },
+                        angleLines: { color: '#333' },
+                        pointLabels: { color: '#fff', font: { family: 'monospace' } },
+                        ticks: { display: false, beginAtZero: true }
+                    }
                 }
             }
-        }
         });
+
         
         // Update chart colors when theme toggles
         document.getElementById('mode-toggle').addEventListener('click', () => {
@@ -372,13 +437,49 @@
         researchChart.update();
         });
 
-
         // --- CONTACT MOCK ---
         document.getElementById('contact-form').addEventListener('submit', (e) => {
             e.preventDefault();
             alert("Transmission Received. David will contact you shortly.");
             e.target.reset();
         });
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        function toggleMenu() {
+            const isOpen = menuToggle.classList.toggle('open');
+            if (isOpen) {
+                mobileMenu.style.display = 'flex';
+                setTimeout(() => mobileMenu.style.opacity = '1', 10);
+            } else {
+                mobileMenu.style.opacity = '0';
+                setTimeout(() => mobileMenu.style.display = 'none', 300);
+            }
+        }
+        
+        menuToggle.addEventListener('click', toggleMenu);
+
+        // --- TERMINAL INTEGRATION ---
+        async function triggerTerminalDeepDive(skill) {
+            const termInput = document.getElementById('terminal-input');
+            const terminalBody = document.getElementById('terminal');
+            
+            // 1. Scroll terminal into view
+            document.querySelector('.terminal-container').scrollIntoView({ behavior: 'smooth' });
+            
+            // 2. Clear current input and "type" the command
+            termInput.value = `research ${skill.toLowerCase().replace(' ', '_')}`;
+            
+            // 3. Manually trigger the 'Enter' key logic
+            const event = new KeyboardEvent('keydown', {
+                key: 'Enter',
+                code: 'Enter',
+                which: 13,
+                keyCode: 13,
+            });
+            termInput.dispatchEvent(event);
+        }
+
     </script>
 </body>
 </html>
