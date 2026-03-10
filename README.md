@@ -1,7 +1,7 @@
 # David Clive Mutale | Polymath Portfolio 🌐
 > **Integrating Mathematics, Cultural Science, and Cybersecurity into a reactive digital ecosystem.**
 
-![Matrix Rain Preview](link-to-your-gif-or-screenshot) <!-- Add a visual hook here -->
+![Matrix Rain Preview](img/matrix-rain.png) <!-- Add a visual hook here -->
 
 ## 🧬 The Philosophy: The "Systems Integration" Approach
 Most challenges today aren't just technical; they are socio-technical. My work as a **Cultural Scientist** informs my approach to **Ethical Hacking**, ensuring that security is human-centric. As a **Mathematician**, I don't just use algorithms; I understand the proofs that power them.
