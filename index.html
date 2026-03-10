@@ -173,6 +173,39 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
+
+        #cursor {
+            color: var(--accent); /* Default Green */
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        #cursor.busy {
+            color: #ff3333; /* Critical Red during scan */
+            text-shadow: 0 0 8px #ff3333;
+        }
+
+        .hidden {
+            opacity: 0;
+        }
+
+
+        /* Hide the default browser text cursor to use our custom one */
+        #terminal-input {
+            caret-color: transparent; 
+        }
+        #status-msg {
+        font-family: monospace;
+        color: #ff3333; /* Matches the "Busy" cursor */
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: blink-fast 0.8s infinite;
+        }
+
+        @keyframes blink-fast {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
     </style>
 </head>
 <body>
@@ -224,9 +257,13 @@
                 <div>[SYSTEM] Online. TAB to autocomplete. 'help' for commands.</div>
             </div>
             <div id="input-line">
-                <span>$ </span><input type="text" id="terminal-input" autofocus autocomplete="off">
+                <span>$ </span>
+                <input type="text" id="terminal-input" autofocus autocomplete="off">
+                <span id="cursor">_</span>
+                <span id="status-msg" style="margin-left: 10px; font-size: 0.7rem; display: none;"></span>
             </div>
         </div>
+
     </div>
 
     <section class="section">
@@ -245,8 +282,6 @@
                         style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.8) contrast(1.2);">
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--accent); box-shadow: 0 0 15px var(--accent); animation: scan-line 4s linear infinite;"></div>
                 </div>
-            </div>
-        </div>
     </section>
 
     <section class="section" id="insights">
@@ -451,6 +486,17 @@
         const commands = {
             help: "Available: whoami, skills, research, status, secret, contact, ls ./certificates, wget ./cv_mutale.pdf, reboot, mode, rm -rf /",
             whoami: async () => {
+                isSystemBusy = true; 
+                const cursor = document.getElementById('cursor');
+                const statusMsg = document.getElementById('status-msg');
+
+                // ACTIVATE BUSY STATE
+                if(cursor) cursor.classList.add('busy'); 
+                if(statusMsg) {
+                    statusMsg.textContent = "Processing...";
+                    statusMsg.style.display = "inline";
+                }
+
                 history.innerHTML += "<div>[SYSTEM] Scanning Biometric Signature...</div>";
                 for (let line of myAsciiArt) {
                     const row = document.createElement('div');
@@ -462,14 +508,43 @@
                     await sleep(30);
                     row.style.opacity = "0.6";
                 }
+                // DEACTIVATE BUSY STATE
+                if(cursor) cursor.classList.remove('busy');
+                if(statusMsg) {
+                    statusMsg.style.display = "none";
+                }
+                isSystemBusy = false;
                 return "[VERIFIED] David Clive Mutale: Polymath Node Active.";
             },
             wget: async (args) => {
-                if (args === './cv_mutale.pdf') {
+                if (isSystemBusy) return; // Guard clause
+                const cursor = document.getElementById('cursor');
+                const statusMsg = document.getElementById('status-msg');
+
+                if (args === './cv_mutale.pdf' || args === 'cv_mutale.pdf') {
+                    isSystemBusy = true; // LOCK ENGAGED
+                    if(cursor) cursor.classList.add('busy'); // VISUAL INDICATOR
+                    if(statusMsg) {
+                        statusMsg.textContent = "Downloading CV...";
+                        statusMsg.style.display = "inline";
+                    }
+
                     const b = document.createElement('div'); history.appendChild(b);
                     for(let i=0; i<=20; i++){ b.textContent=`Download: [${'='.repeat(i)}${'-'.repeat(20-i)}] ${i*5}%`; await sleep(50); }
                     const a = document.createElement('a'); a.href = '#'; a.textContent="[Click to Open CV]"; history.appendChild(a);
-                    return "Asset retrieved.";
+                    
+                    // Trigger real download
+                    const link = document.createElement('a');
+                    link.href = './cv_mutale.pdf';
+                    link.download = 'David_Clive_Mutale_CV.pdf';
+                    link.click();
+
+                    // RESET UI
+                    if(cursor) cursor.classList.remove('busy');
+                    if(statusMsg) statusMsg.style.display = "none";
+                    isSystemBusy = false; // LOCK RELEASED
+
+                    return "Asset extraction successful. Check downloads.";
                 }
                 return "Usage: wget ./cv_mutale.pdf";
             },
@@ -661,6 +736,19 @@
             });
             termInput.dispatchEvent(event);
         }
+
+        // Blinking Cursor Logic
+        setInterval(() => {
+            const cursor = document.getElementById('cursor');
+            if (!cursor) return;
+
+            if (isSystemBusy) {
+                cursor.classList.remove('hidden'); // Stay solid while scanning
+            } else {
+                cursor.classList.toggle('hidden'); // Blink while waiting
+            }
+        }, 500);
+
 
         // --- CLEARANCE ANIMATION ---
         const observer = new IntersectionObserver((entries) => {
