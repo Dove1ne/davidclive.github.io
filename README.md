@@ -58,10 +58,10 @@ A dynamic visualization of my research capabilities, proving my analytical depth
 
 🧑‍💻 Commands to Try
 Open the terminal on the site and type: 
-whoami - Initiate a line-by-line biometric ASCII scan.
-skills - Display the core technical stack.
-research data_analysis - Trigger a terminal deep-dive into specific analytical expertise.
-wget ./cv_mutale.pdf - Securely download the professional CV.
+*   **whoami - Initiate a line-by-line biometric ASCII scan.
+*   **skills - Display the core technical stack.
+*   **research data_analysis - Trigger a terminal deep-dive into specific analytical expertise.
+*   **wget ./cv_mutale.pdf - Securely download the professional CV.
 
 ---
 
@@ -72,8 +72,8 @@ For high-stakes research or professional inquiries, use the **PGP Public Key** l
 
 🤝 Connect & Collaborate
 I am passionate about creating innovative solutions that are culturally relevant, data-driven, and secure.
-LinkedIn: David Clive Mutale
-Email: davidclivemutale@gmail.com
+*  **LinkedIn: David Clive Mutale
+*  **Email: davidclivemutale@gmail.com
 ## 📫 Initiate Uplink
 *   **Live Portfolio:** [davidclive.github.io](https://dove1ne.github.io/davidclive.github.io/)
 *   **LinkedIn:** [/in/dcmutale](https://linkedin.com)
