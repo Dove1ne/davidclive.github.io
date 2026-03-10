@@ -12,8 +12,6 @@
     
     <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 
 
     <style>
@@ -236,7 +234,7 @@
                 <p>David leverages advanced <b>Mathematics</b> and <b>Cultural Science</b> to solve problems that others miss. His research bridges the gap between human behavior and digital infrastructure.</p>
                 <canvas id="researchChart"></canvas>
             </div>
-             <div class="card" data-img="C:\Users\BKC MEDIA\Desktop\logo-main.png">
+             <div class="card" data-img="img/logo-main.png">
                 <h2>Brand Identity</h2>
                 <p>Tech Logo</p>
             </div>
@@ -462,7 +460,7 @@
                 if (args === './cv_mutale.pdf') {
                     const b = document.createElement('div'); history.appendChild(b);
                     for(let i=0; i<=20; i++){ b.textContent=`Download: [${'='.repeat(i)}${'-'.repeat(20-i)}] ${i*5}%`; await sleep(50); }
-                    const a = document.createElement('a'); a.href = '#'; a.textContent="[Click to Open CV]"; history.appendChild(a);
+                    const a = document.createElement('a'); a.href = 'cv_mutale.pdf'; a.textContent="[Click to Open CV]"; history.appendChild(a);
                     return "Asset retrieved.";
                 }
                 return "Usage: wget ./cv_mutale.pdf";
