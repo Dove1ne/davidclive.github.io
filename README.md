@@ -6,6 +6,8 @@
 ## 🧬 The Philosophy: The "Systems Integration" Approach
 Most challenges today aren't just technical; they are socio-technical. My work as a **Cultural Scientist** informs my approach to **Ethical Hacking**, ensuring that security is human-centric. As a **Mathematician**, I don't just use algorithms; I understand the proofs that power them.
 
+---
+
 📖 Overview
 This project is an interactive, terminal-inspired professional workstation. It serves as a living proof-of-concept for data-driven innovation and secure system architecture, moving beyond static resumes to provide a functional "probing" environment for technical credentials.
 The Problem: Traditional portfolios fail to demonstrate the "systems thinking" required for complex ICT and security roles.
@@ -70,14 +72,11 @@ For high-stakes research or professional inquiries, use the **PGP Public Key** l
 
 ---
 
-🤝 Connect & Collaborate
-I am passionate about creating innovative solutions that are culturally relevant, data-driven, and secure.
-*  **LinkedIn:** David Clive Mutale
-*  **Email:** davidclivemutale@gmail.com
 ## 📫 Initiate Uplink
+I am passionate about creating innovative solutions that are culturally relevant, data-driven, and secure.
 *   **Live Portfolio:** [davidclive.github.io](https://dove1ne.github.io/davidclive.github.io/)
 *   **LinkedIn:** [/in/dcmutale](https://linkedin.com)
-*   **Email:** `davidclivemutale@gmail.com`
+*   **Email:** davidclivemutale@gmail.com
 
 ---
 
